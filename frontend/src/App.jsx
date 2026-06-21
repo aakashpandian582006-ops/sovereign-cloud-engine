@@ -120,7 +120,7 @@ function App() {
           ))}
         </div>
         
-        <div className="nav-menu" style={{marginTop: 'auto', flex: 0}}>
+        <div className="nav-menu" style={{marginTop: 'auto', flex: 'none', overflowY: 'visible'}}>
           {navItemsBottom.map(item => (
             <div 
               key={item} 

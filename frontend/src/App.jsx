@@ -10,6 +10,7 @@ import Members from './components/Members';
 import Settings from './components/Settings';
 import HelpCenter from './components/HelpCenter';
 import Administrator from './components/Administrator';
+import { getMockTelemetry, getMockAudit } from './mockData';
 
 function App() {
   const [activeTab, setActiveTab] = useState('Dashboard');
@@ -37,9 +38,14 @@ function App() {
         const res = await fetch(`${apiUrl}/api/status?region=${activeZone}`, {
           headers: { 'x-user-region': activeZone }
         });
-        if (res.ok) setTelemetry(await res.json());
+        if (res.ok) {
+          setTelemetry(await res.json());
+        } else {
+          setTelemetry(getMockTelemetry(activeZone));
+        }
       } catch (e) {
-        console.error("API unavailable.");
+        // Fallback for Vercel deployment where localhost backend is unreachable
+        setTelemetry(getMockTelemetry(activeZone));
       }
     };
     fetchTelemetry();
@@ -53,9 +59,11 @@ function App() {
       const res = await fetch(`${apiUrl}/api/audit?region=${activeZone}`, {
         headers: { 'x-user-region': activeZone }
       });
-      return await res.json();
+      if (res.ok) return await res.json();
+      return getMockAudit(activeZone);
     } catch (e) {
-      return { error: 'Failed to reach audit endpoint' };
+      // Fallback for Vercel deployment
+      return getMockAudit(activeZone);
     }
   };
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { getMockAnalytics } from '../mockData';
 
 export default function Analytics({ activeZone }) {
   const [stats, setStats] = useState({ throughput: '0 GB/s', latency: '0ms', packet_loss: '0%' });
@@ -10,8 +11,14 @@ export default function Analytics({ activeZone }) {
         const res = await fetch(`${apiUrl}/api/analytics?region=${activeZone}`, {
           headers: { 'x-user-region': activeZone }
         });
-        setStats(await res.json());
-      } catch (e) {}
+        if (res.ok) {
+          setStats(await res.json());
+        } else {
+          setStats(getMockAnalytics());
+        }
+      } catch (e) {
+        setStats(getMockAnalytics());
+      }
     };
     fetchStats();
     const interval = setInterval(fetchStats, 2000);

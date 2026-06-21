@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { getMockMembers } from '../mockData';
 
 export default function Members({ activeZone }) {
   const [members, setMembers] = useState([]);
@@ -10,8 +11,14 @@ export default function Members({ activeZone }) {
         const res = await fetch(`${apiUrl}/api/members?region=${activeZone}`, {
           headers: { 'x-user-region': activeZone }
         });
-        setMembers(await res.json());
-      } catch (e) {}
+        if (res.ok) {
+          setMembers(await res.json());
+        } else {
+          setMembers(getMockMembers(activeZone));
+        }
+      } catch (e) {
+        setMembers(getMockMembers(activeZone));
+      }
     };
     fetchMembers();
   }, [activeZone]);

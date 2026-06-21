@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { getMockNotifications } from '../mockData';
 
 export default function Notifications({ activeZone }) {
   const [notifs, setNotifs] = useState([]);
@@ -10,11 +11,13 @@ export default function Notifications({ activeZone }) {
         const res = await fetch(`${apiUrl}/api/notifications?region=${activeZone}`, {
           headers: { 'x-user-region': activeZone }
         });
-        setNotifs(await res.json());
+        if (res.ok) {
+          setNotifs(await res.json());
+        } else {
+          setNotifs(getMockNotifications(activeZone));
+        }
       } catch (e) {
-        setNotifs([
-          { id: 1, type: 'SYS', message: 'Offline fallback mode.', time: 'Now' }
-        ]);
+        setNotifs(getMockNotifications(activeZone));
       }
     };
     fetchNotifs();

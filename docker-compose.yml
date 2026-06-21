@@ -1,17 +1,15 @@
-version: "3.8"
-
 services:
-  frontend:
+  frontend-portal:
     build:
       context: ./frontend
     ports:
       - "5173:5173"
     environment:
-      - VITE_API_URL=http://localhost:5000
+      - VITE_API_URL=http://localhost:5001
     depends_on:
-      - backend
+      - backend-gateway
 
-  backend:
+  backend-gateway:
     build:
       context: ./backend
     ports:

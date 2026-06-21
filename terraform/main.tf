@@ -1,5 +1,5 @@
 # ==========================================================================
-# ASIA PACIFIC REGION: MUMBAI PRODUCTION LAYER
+# ASIA PACIFIC REGION: MUMBAI PRODUCTION LAYER (ap-south-1)
 # ==========================================================================
 
 resource "null_resource" "mumbai_vpc_network" {
@@ -16,7 +16,7 @@ resource "null_resource" "mumbai_database_cluster" {
 }
 
 # ==========================================================================
-# EUROPE REGION: FRANKFURT COMPLIANCE LAYER
+# EUROPE REGION: FRANKFURT COMPLIANCE LAYER (eu-west-1)
 # ==========================================================================
 
 resource "null_resource" "frankfurt_vpc_network" {

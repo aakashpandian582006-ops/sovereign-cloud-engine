@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Typewriter from './Typewriter';
 
 export default function Dashboard({ telemetry, onAudit }) {
   const [auditState, setAuditState] = useState('idle');
@@ -24,7 +25,7 @@ export default function Dashboard({ telemetry, onAudit }) {
       {auditState === 'complete' && auditReport && (
         <div className="ai-report-box glass-panel fade-in">
           <div className="ai-typing">
-            {JSON.stringify(auditReport, null, 2)}
+            <Typewriter text={JSON.stringify(auditReport, null, 2)} speed={12} />
           </div>
         </div>
       )}

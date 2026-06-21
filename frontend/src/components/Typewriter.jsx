@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Typewriter = ({ text, speed = 15 }) => {
+const Typewriter = ({ text, speed = 15, onComplete }) => {
   const [displayedText, setDisplayedText] = useState('');
 
   useEffect(() => {
@@ -17,6 +17,8 @@ const Typewriter = ({ text, speed = 15 }) => {
         // Add slight randomness to typing speed to make it look like a real AI processing
         const randomSpeed = speed + (Math.random() * 10 - 5);
         timeoutId = setTimeout(typeWriter, randomSpeed);
+      } else if (onComplete) {
+        onComplete();
       }
     };
     

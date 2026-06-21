@@ -16,6 +16,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [activeZone, setActiveZone] = useState('ap-south-1');
   const [telemetry, setTelemetry] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const layoutRef = useRef(null);
 
   // Ambient Cursor Glow
@@ -44,7 +45,6 @@ function App() {
           setTelemetry(getMockTelemetry(activeZone));
         }
       } catch (e) {
-        // Fallback for Vercel deployment where localhost backend is unreachable
         setTelemetry(getMockTelemetry(activeZone));
       }
     };
@@ -62,9 +62,13 @@ function App() {
       if (res.ok) return await res.json();
       return getMockAudit(activeZone);
     } catch (e) {
-      // Fallback for Vercel deployment
       return getMockAudit(activeZone);
     }
+  };
+
+  const handleTabClick = (item) => {
+    setActiveTab(item);
+    setIsMobileMenuOpen(false); // Close menu on mobile after selection
   };
 
   const renderContent = () => {
@@ -89,8 +93,16 @@ function App() {
   return (
     <div className="dashboard-layout" ref={layoutRef}>
       
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="mobile-overlay" 
+          onClick={() => setIsMobileMenuOpen(false)}
+        ></div>
+      )}
+
       {/* Sidebar */}
-      <div className="sidebar glass-panel" style={{borderTop: 'none', borderBottom: 'none', borderLeft: 'none', borderRadius: 0}}>
+      <div className={`sidebar glass-panel ${isMobileMenuOpen ? 'open' : ''}`} style={{borderTop: 'none', borderBottom: 'none', borderLeft: 'none', borderRadius: 0}}>
         <div className="logo">
           <div className="logo-dot"></div>
           Sovereign<span style={{fontWeight: 300}}>OS</span>
@@ -101,7 +113,7 @@ function App() {
             <div 
               key={item} 
               className={`nav-item ${activeTab === item ? 'active' : ''}`}
-              onClick={() => setActiveTab(item)}
+              onClick={() => handleTabClick(item)}
             >
               {item}
             </div>
@@ -113,7 +125,7 @@ function App() {
             <div 
               key={item} 
               className={`nav-item ${activeTab === item ? 'active' : ''}`}
-              onClick={() => setActiveTab(item)}
+              onClick={() => handleTabClick(item)}
             >
               {item}
             </div>
@@ -124,7 +136,12 @@ function App() {
       {/* Main Content */}
       <div className="main-content">
         <div className="top-header">
-          <h1 style={{fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-1px', color: 'var(--text-primary)'}}>{activeTab}</h1>
+          <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
+            <button className="hamburger-btn" onClick={() => setIsMobileMenuOpen(true)}>
+              ☰
+            </button>
+            <h1 className="page-title">{activeTab}</h1>
+          </div>
           
           <div className="region-selector">
             <button 

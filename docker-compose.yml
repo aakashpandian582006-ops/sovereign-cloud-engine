@@ -15,8 +15,9 @@ services:
     ports:
       - "5001:5000"
     environment:
-      - PORT=5000
+      - PORT=5001
       - DYNAMODB_ENDPOINT=http://localstack:4566
+      - ELITE_TIER_ENABLED=true
     depends_on:
       - localstack
 
